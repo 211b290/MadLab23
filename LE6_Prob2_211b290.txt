@@ -1,0 +1,52 @@
+public class MainActivity extends AppCompatActivity {
+
+    private MediaPlayer mediaPlayer;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.my_audio_file);
+
+        Button playPauseButton = findViewById(R.id.play_pause_button);
+        Button stopButton = findViewById(R.id.stop_button);
+        Button skipButton = findViewById(R.id.skip_button);
+
+        playPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.pause();
+                    playPauseButton.setText("Play");
+                } else {
+                    mediaPlayer.start();
+                    playPauseButton.setText("Pause");
+                }
+            }
+        });
+
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mediaPlayer.stop();
+                mediaPlayer.prepareAsync();
+                playPauseButton.setText("Play");
+            }
+        });
+
+        skipButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mediaPlayer.seekTo(mediaPlayer.getCurrentPosition() + 10000);
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mediaPlayer.release();
+        mediaPlayer = null;
+    }
+}
